@@ -1,1 +1,1 @@
-bdb-api
+Biblioteca do Bardo é um sistema onde você pode votar em seu livro favorito.
