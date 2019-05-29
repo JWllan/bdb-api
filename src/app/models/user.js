@@ -4,22 +4,36 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true
     },
     email: {
         type: String,
         unique: true,
         required: true,
-        lowercase: true,
+        lowercase: true
     },
     password: {
         type: String,
         required: true,
-        select: false,
+        select: false
     },
+    votes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vote',
+        select: false
+    }],
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Commentary',
+        select: false
+    }],
+    favorites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Favorite'
+    }],
     createdAt: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     },
 });
 

@@ -1,5 +1,4 @@
 const mongoose = require('../../database');
-const bcrypt = require('bcryptjs');
 
 const BookSchema = new mongoose.Schema({
     title: {
@@ -8,34 +7,36 @@ const BookSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        unique: true,
         required: true
+    },
+    gender: {
+        type: String
     },
     launchedIn: {
         type: Date,
         required: true
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         required: true
     },
     votes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vote'
     }],
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Commentary'
+    }],
+    favorites: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Favorite'
+    }],
     createdAt: {
         type: Date,
         default: Date.now
     },
 });
-
-BookSchema.pre('save', async function(next) {
-    const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash;
-
-    next();
-})
 
 const Book = mongoose.model('Book', BookSchema);
 

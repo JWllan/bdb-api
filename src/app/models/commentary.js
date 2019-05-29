@@ -1,8 +1,8 @@
 const mongoose = require('../../database');
 
-const VoteSchema = new mongoose.Schema({
-    value: {
-        type: Number,
+const CommentarySchema = new mongoose.Schema({
+    text: {
+        type: String,
         required: true,
     },
     book: {
@@ -21,6 +21,6 @@ const VoteSchema = new mongoose.Schema({
     },
 });
 
-const Vote = mongoose.model('Vote', VoteSchema);
+const Commentary = mongoose.model('Commentary', CommentarySchema);
 
-module.exports = Vote;
+module.exports = Commentary;

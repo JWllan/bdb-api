@@ -1,10 +1,6 @@
 const mongoose = require('../../database');
 
-const VoteSchema = new mongoose.Schema({
-    value: {
-        type: Number,
-        required: true,
-    },
+const FavoriteSchema = new mongoose.Schema({
     book: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Book',
@@ -21,6 +17,6 @@ const VoteSchema = new mongoose.Schema({
     },
 });
 
-const Vote = mongoose.model('Vote', VoteSchema);
+const Favorite = mongoose.model('Favorite', FavoriteSchema);
 
-module.exports = Vote;
+module.exports = Favorite;

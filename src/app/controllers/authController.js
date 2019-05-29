@@ -13,11 +13,11 @@ function generateToken(params = {}) {
 }
 
 router.post('/register', async (req, res) => {
-    const { email } = req.body;
-
     try {
+        const { email } = req.body;
+
         if (await User.findOne({ email })) {
-            return res.status(400).send({error: 'User already exists' });
+            return res.status(400).send({ error: 'User already exists' });
         }
         
         const user = await User.create(req.body);
@@ -30,29 +30,34 @@ router.post('/register', async (req, res) => {
         });
     }
     catch (err) {
-        return res.status(400).send({ error: 'Registration failed' + err });
+        return res.status(500).send({ error: 'Registration failed' });
     }
 });
 
 router.post('/authenticate', async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email }).select('+password');
-
-    if(!user) {
-        return res.status(404).send({ error: 'User not found' });
+    try {
+        const { email, password } = req.body;
+    
+        const user = await User.findOne({ email }).select('+password');
+    
+        if(!user) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+    
+        if(!await bcrypt.compare(password, user.password)) {
+            return res.status(401).send({ error: 'Invalid password' });
+        }
+    
+        user.password = undefined;
+    
+        return res.send({
+            user,
+            token: generateToken({ id: user.id })
+        });
     }
-
-    if(!await bcrypt.compare(password, user.password)) {
-        return res.status(401).send({ error: 'Invalid password' });
+    catch (err) {
+        return res.status(500).send({ error: 'Authentication failed' });
     }
-
-    user.password = undefined;
-
-    return res.send({
-        user,
-        token: generateToken({ id: user.id })
-    });
 })
 
 module.exports = app => app.use('/auth', router);
