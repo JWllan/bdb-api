@@ -33,7 +33,7 @@ router.delete('/:id', async (req, res) => {
 
         return res.send({ });
     }
-    catch {
+    catch (err) {
         return res.status(400).send({ error: 'Error unfavoriting' });
     }
 });

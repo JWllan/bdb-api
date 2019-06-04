@@ -51,7 +51,7 @@ router.get('/:id', async (req, res) => {
 
         return res.send({ book });
     }
-    catch {
+    catch (err) {
         return res.status(400).send({ error: 'Error loading book' });
     }
 });
@@ -84,7 +84,7 @@ router.delete('/:id', async (req, res) => {
 
         return res.send({ });
     }
-    catch {
+    catch (err) {
         return res.status(400).send({ error: 'Error deleting book' });
     }
 });
