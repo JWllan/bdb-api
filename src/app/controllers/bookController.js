@@ -2,28 +2,15 @@ const express = require('express');
 const authMiddleware = require('../middlewares/auth');
 
 const Book = require('../models/book');
+const Commentary = require('../models/commentary');
+const User = require('../models/user');
 
 const router = express.Router();
 router.use(authMiddleware);
 
 router.get('/', async (req, res) => {
     try {
-        const books = await Book.find().populate(['votes', 'comments', 'favorites']);
-
-        // books.forEach(book => {
-        //     if (book.votes.length > 0) {
-        //         book.voteAvg = book.votes.reduce((a, b) => { return a.value + b.value; }) / book.votes.length;
-        //         book.votes = book.votes.filter(vote => { vote.user = req.userId });
-        //     }
-        //     if (book.comments.length > 0) {
-        //         book.commentsCount = book.comments.length;
-        //         book.comments = book.comments.filter(comment => { comment.user = req.userId });
-        //     }
-        //     if (book.favorites.length > 0) {
-        //         book.favoritesCount = book.favorites.length;
-        //         book.favorites = book.favorites.filter(favorite => { favorite.user = req.userId });
-        //     }
-        // });
+        const books = await Book.find().populate(['votes', {path: 'comments', populate: {path:'user'}}, 'favorites']);
 
         return res.send({ books });
     }

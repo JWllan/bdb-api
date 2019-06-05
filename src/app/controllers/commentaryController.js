@@ -3,6 +3,7 @@ const authMiddleware = require('../middlewares/auth');
 
 const Commentary = require('../models/commentary');
 const Book = require('../models/book');
+const User = require('../models/user');
 
 const router = express.Router();
 router.use(authMiddleware);
@@ -14,9 +15,12 @@ router.post('/:id', async (req, res) => {
         const commentary = await Commentary.create({ text, book: req.params.id, user: req.userId });
 
         const book = await Book.findById(req.params.id).populate('comments');
-
         book.comments.push(commentary);
         await book.save();
+        
+        const user = await User.findById(req.userId).select('password').populate('comments');
+        user.comments.push(commentary);
+        await user.save();
 
         return res.send({ commentary });
     }
