@@ -19,13 +19,11 @@ const UserSchema = new mongoose.Schema({
     },
     votes: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vote',
-        select: false
+        ref: 'Vote'
     }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Commentary',
-        select: false
+        ref: 'Commentary'
     }],
     favorites: [{
         type: mongoose.Schema.Types.ObjectId,
