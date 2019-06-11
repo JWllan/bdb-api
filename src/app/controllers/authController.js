@@ -41,7 +41,7 @@ router.post('/authenticate', async (req, res) => {
     try {
         const { email, password } = req.body;
     
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select('+password').populate({path: 'favorites', populate: {path:'book'}});
     
         if(!user) {
             return res.status(404).send({ error: 'User not found' });
