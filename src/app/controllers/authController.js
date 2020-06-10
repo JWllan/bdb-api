@@ -20,6 +20,9 @@ router.post('/register', async (req, res) => {
             return res.status(400).send({ error: 'User already exists' });
         }
         
+        const hash = await bcrypt.hash(req.body.password, 10);
+        req.body.password = hash;
+
         const user = await User.create(req.body);
 
         user.password = undefined;
@@ -38,7 +41,7 @@ router.post('/authenticate', async (req, res) => {
     try {
         const { email, password } = req.body;
     
-        const user = await User.findOne({ email }).select('+password');
+        const user = await User.findOne({ email }).select('+password').populate({path: 'favorites', populate: {path:'book'}});
     
         if(!user) {
             return res.status(404).send({ error: 'User not found' });
